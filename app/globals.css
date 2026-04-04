@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+/* ── Reset defaults that conflict with the portfolio color system ── */
+:root {
+  --background: #0A0F1E;
+  --foreground: #FFFFFF;
+}
+
+body {
+  background-color: #0A0F1E;
+  color: #FFFFFF;
+  margin: 0;
+  padding: 0;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Remove default anchor styles */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Remove default list styles */
+ul, ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
