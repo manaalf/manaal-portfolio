@@ -1,31 +1,52 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600&display=swap');
 
-/* ── Reset defaults that conflict with the portfolio color system ── */
 :root {
-  --background: #0A0F1E;
-  --foreground: #FFFFFF;
+  /* ── Palette ── */
+  --cream:        #F5F0E8;
+  --cream-dark:   #EDE7D9;
+  --forest:       #1C3D35;
+  --forest-light: #234D43;
+  --forest-mid:   #2A5C50;
+  --teal:         #3EBFA0;
+  --teal-muted:   #2E9B82;
+  --sand:         #C4A882;
+  --charcoal:     #1A1A1A;
+  --slate:        #4A5568;
+  --slate-light:  #718096;
+  --white:        #FFFFFF;
+
+  /* ── Typography ── */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'Inter', system-ui, sans-serif;
 }
+
+* { box-sizing: border-box; }
 
 body {
-  background-color: #0A0F1E;
-  color: #FFFFFF;
   margin: 0;
   padding: 0;
+  background-color: var(--cream);
+  color: var(--charcoal);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
 }
 
-*, *::before, *::after {
-  box-sizing: border-box;
+a { color: inherit; text-decoration: none; }
+ul, ol { list-style: none; margin: 0; padding: 0; }
+
+/* Section label utility */
+.section-label {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
 
-/* Remove default anchor styles */
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-/* Remove default list styles */
-ul, ol {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+/* Playfair headings */
+.display-heading {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.1;
 }

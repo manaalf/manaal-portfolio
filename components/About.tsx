@@ -11,178 +11,147 @@ const STAT_BOXES = [
   { value: "MSBA",  label: "Paul Merage School of Business, UC Irvine · June 2026" },
   { value: "5+",    label: "Projects" },
   { value: "2026",  label: "Graduating" },
+  { value: "CA",    label: "Based in California" },
 ];
 
-const PARA_1 = `I have always needed to know why before I could figure out what. It started at the dinner table, asking questions nobody had invited. It continued through an economics degree, where I discovered that the most interesting problems lived not in the numbers but in the behavior behind them. Why do people make irrational decisions? What makes a consumer choose one thing over another? What does the data not say that the person behind it is screaming?`;
-
-const PARA_2 = `Economics gave me the framework. But the world was changing faster than any framework could keep up with. AI was not coming. It was already here, quietly rewriting how decisions get made, how stories get told, how businesses understand their customers. I saw it and I made a choice. I moved to the United States, enrolled in UCI's MS in Business Analytics, and deliberately built the technical skills I knew I would need. Because understanding the technology and knowing what to do with it are two very different skills. I wanted both.`;
+const BODY = [
+  `I have always needed to know why before I could figure out what. It started at the dinner table, asking questions nobody had invited. It continued through an economics degree, where I discovered that the most interesting problems lived not in the numbers but in the behavior behind them.`,
+  `Economics gave me the framework. But AI was already here, quietly rewriting how decisions get made. I moved to the United States, enrolled in UCI's MSBA, and deliberately built the technical skills I knew I would need. Because understanding the technology and knowing what to do with it are two very different skills. I wanted both.`,
+  `At UCI I built an NBA chatbot, predicted Yelp ratings using machine learning, and designed an insurance policy tool with my fellow international students because none of us understood US healthcare and waiting for someone else to solve it felt like a waste of time.`,
+];
 
 export default function About() {
-  const sectionRef  = useRef<HTMLElement>(null);
-  const headingRef  = useRef<HTMLDivElement>(null);
-  const cardRef     = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const leftRef    = useRef<HTMLDivElement>(null);
+  const rightRef   = useRef<HTMLDivElement>(null);
 
-  useGSAP(
-    () => {
-      // Heading fades up first
-      if (headingRef.current) {
-        gsap.fromTo(
-          headingRef.current,
-          { y: 32, opacity: 0 },
-          {
-            y: 0, opacity: 1, duration: 0.8, ease: "power3.out",
-            scrollTrigger: { trigger: headingRef.current, start: "top 85%", once: true },
-          }
-        );
-      }
-      // Card animates in as one unit shortly after
-      if (cardRef.current) {
-        gsap.fromTo(
-          cardRef.current,
-          { y: 48, opacity: 0 },
-          {
-            y: 0, opacity: 1, duration: 0.9, ease: "power3.out",
-            scrollTrigger: { trigger: cardRef.current, start: "top 82%", once: true },
-          }
-        );
-      }
-    },
-    { scope: sectionRef }
-  );
-
-  const bodyStyle: React.CSSProperties = {
-    fontSize: 15,
-    color: "#94A3B8",
-    margin: 0,
-    lineHeight: 1.8,
-  };
+  useGSAP(() => {
+    if (leftRef.current) {
+      gsap.fromTo(leftRef.current,
+        { x: -32, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.9, ease: "power3.out",
+          scrollTrigger: { trigger: leftRef.current, start: "top 82%", once: true } }
+      );
+    }
+    if (rightRef.current) {
+      gsap.fromTo(Array.from(rightRef.current.children),
+        { y: 28, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.75, stagger: 0.1, ease: "power3.out",
+          scrollTrigger: { trigger: rightRef.current, start: "top 82%", once: true } }
+      );
+    }
+  }, { scope: sectionRef });
 
   return (
     <section
       id="about"
       ref={sectionRef}
-      style={{ backgroundColor: "#0D1526", padding: "120px 0" }}
+      style={{ backgroundColor: "var(--cream)", padding: "120px 0" }}
     >
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px" }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 48px" }}>
 
-        {/* ── Heading — outside the card, left-aligned ── */}
-        <div ref={headingRef} style={{ marginBottom: 32 }}>
-          <span
-            style={{
-              display: "block",
-              fontSize: 11,
-              fontWeight: 500,
-              letterSpacing: "0.15em",
-              textTransform: "uppercase",
-              color: "#00D4AA",
-              marginBottom: 12,
-            }}
-          >
-            ABOUT
-          </span>
-          <h2
-            style={{
-              fontSize: 36,
-              fontWeight: 600,
-              color: "#FFFFFF",
-              margin: 0,
-              lineHeight: 1.15,
-            }}
-          >
-            The thinking behind the work
-          </h2>
-        </div>
+        {/* Section label */}
+        <span className="section-label" style={{ color: "var(--teal-muted)", display: "block", marginBottom: 12 }}>
+          About
+        </span>
 
-        {/*
-          ── Full-width card — sharp corners, teal border, gradient fill ──
-          The gradient runs top-left (faint teal) → bottom-right (near-solid navy),
-          giving the card depth without competing with the content.
-        */}
-        <div
-          ref={cardRef}
-          style={{
-            background: "linear-gradient(135deg, rgba(0,212,170,0.06) 0%, rgba(17,29,53,0.95) 100%)",
-            border: "1px solid #00D4AA",
-            borderRadius: 0,
-            padding: "48px",
-          }}
-        >
-          {/*
-            3-column grid, 2-row implicit rows.
-            Z reading path:
-              [Para 1 — top left]   [Photo — center, both rows]   [empty — top right]
-              [empty — bottom left] [Photo continues]              [Para 2 — bottom right]
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80, alignItems: "start" }}
+             className="about-grid">
 
-            On mobile: single column, order: para1 → photo+stats → para2
-          */}
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-3 lg:gap-x-12 lg:gap-y-8">
+          {/* Left — photo + stats */}
+          <div ref={leftRef} style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+            <h2 style={{
+              fontFamily: "var(--font-display)",
+              fontSize: "clamp(36px, 4vw, 52px)",
+              fontWeight: 700, color: "var(--forest)",
+              margin: 0, lineHeight: 1.1,
+            }}>
+              The thinking<br />behind the work
+            </h2>
 
-            {/* Para 1 — top of left column */}
-            <div className="order-1 lg:col-start-1 lg:row-start-1 flex items-start">
-              <p style={bodyStyle}>{PARA_1}</p>
-            </div>
-
-            {/* Center column — photo + stat boxes, spans both rows, centered */}
-            <div
-              className="order-2 lg:col-start-2 lg:row-start-1 lg:row-span-2 flex flex-col items-center justify-center gap-5"
-              style={{
-                background: "rgba(0,212,170,0.06)",
-                borderLeft: "1px solid rgba(0,212,170,0.3)",
-                borderRight: "1px solid rgba(0,212,170,0.3)",
-                padding: "32px 24px",
-              }}
-            >
+            {/* Photo */}
+            <div style={{ position: "relative", display: "inline-block" }}>
               <img
                 src="/photo.jpg"
                 alt="Manaal Fatima"
                 style={{
-                  width: 180,
-                  height: 180,
-                  borderRadius: "50%",
-                  objectFit: "cover",
+                  width: "100%", maxWidth: 320,
+                  aspectRatio: "4/5", objectFit: "cover",
                   objectPosition: "center top",
-                  boxShadow: "0 0 40px rgba(0,212,170,0.18)",
-                  border: "2px solid rgba(0,212,170,0.5)",
-                  flexShrink: 0,
+                  borderRadius: 4,
+                  display: "block",
+                  filter: "saturate(0.9)",
                 }}
               />
+              {/* Teal border accent */}
+              <div style={{
+                position: "absolute", inset: 0,
+                border: "2px solid var(--teal)",
+                borderRadius: 4,
+                transform: "translate(8px, 8px)",
+                zIndex: -1,
+              }} />
+            </div>
 
+            {/* Stat grid */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2 }}>
               {STAT_BOXES.map(({ value, label }) => (
-                <div
-                  key={value}
-                  style={{
-                    width: "100%",
-                    backgroundColor: "rgba(10,15,30,0.6)",
-                    border: "1px solid #1E3A5F",
-                    borderRadius: 8,
-                    padding: "14px 18px",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 4,
-                  }}
-                >
-                  <span style={{ fontSize: 26, fontWeight: 700, color: "#00D4AA", lineHeight: 1 }}>
+                <div key={value} style={{
+                  backgroundColor: "var(--forest)",
+                  padding: "20px 22px",
+                }}>
+                  <span style={{
+                    fontFamily: "var(--font-display)",
+                    fontSize: 28, fontWeight: 700,
+                    color: "var(--teal)", display: "block", lineHeight: 1,
+                  }}>
                     {value}
                   </span>
-                  <span style={{ fontSize: 13, fontWeight: 400, color: "#FFFFFF" }}>
+                  <span style={{ fontSize: 12, color: "rgba(245,240,232,0.65)", marginTop: 6, display: "block", lineHeight: 1.4 }}>
                     {label}
                   </span>
                 </div>
               ))}
             </div>
+          </div>
 
-            {/* Empty spacer — top right on desktop, hidden on mobile */}
-            <div className="hidden lg:block lg:col-start-3 lg:row-start-1" aria-hidden />
+          {/* Right — body text */}
+          <div ref={rightRef} style={{ display: "flex", flexDirection: "column", gap: 28, paddingTop: 80 }}>
+            {/* Pull quote */}
+            <blockquote style={{
+              margin: 0, padding: "0 0 0 24px",
+              borderLeft: "3px solid var(--teal)",
+            }}>
+              <p style={{
+                fontFamily: "var(--font-display)",
+                fontSize: 20, fontStyle: "italic",
+                color: "var(--forest)", margin: 0, lineHeight: 1.5,
+              }}>
+                &ldquo;I don&apos;t pick up the tool until I know what I&apos;m trying to say with it.&rdquo;
+              </p>
+            </blockquote>
 
-            {/* Para 2 — bottom of right column */}
-            <div className="order-3 lg:col-start-3 lg:row-start-2 flex items-end">
-              <p style={bodyStyle}>{PARA_2}</p>
-            </div>
+            {BODY.map((para, i) => (
+              <p key={i} style={{
+                fontSize: 16, color: "var(--slate)",
+                margin: 0, lineHeight: 1.85,
+              }}>
+                {para}
+              </p>
+            ))}
 
+            <p style={{ fontSize: 15, color: "var(--slate-light)", margin: 0, lineHeight: 1.8, fontStyle: "italic" }}>
+              Outside of all of this I am watching Barcelona, following the WNBA more seriously than most people think is reasonable, and reading about something that has nothing to do with any of this and then finding out it has everything to do with all of it.
+            </p>
           </div>
         </div>
-
       </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .about-grid { grid-template-columns: 1fr !important; gap: 48px !important; }
+        }
+      `}</style>
     </section>
   );
 }
