@@ -21,6 +21,18 @@ const ENTRIES = [
   },
   {
     isCurrent: false,
+    date: "Sep 2024 – Mar 2025",
+    role: "Student Consultant — Project Manager & Analytics Lead",
+    company: "PAN Group (UCI Capstone)",
+    companyUrl: null,
+    bullets: [
+      "Led a 6-month consulting engagement for an Australian VC firm to quantify whether purpose-driven companies outperform peers — spanning methodology design, NLP pipeline development, statistical analysis, and client delivery.",
+      "Built an LLM scoring pipeline via Anthropic Batch API to process SEC filings across 904 NYSE companies and 20 GICS sectors; OLS regression established statistically significant purpose-performance correlation (r = 0.265, p < 0.001).",
+      "Delivered quadrant classification framework and interactive Tableau dashboard scoped for immediate redeployment in client due diligence.",
+    ],
+  },
+  {
+    isCurrent: false,
     date: "Jun 2023 – Jul 2023",
     role: "Intern",
     company: "Engro Corporation",
@@ -32,7 +44,7 @@ const ENTRIES = [
   },
   {
     isCurrent: false,
-    date: "Jun 2022",
+    date: "Jun 2022 – Aug 2022",
     role: "Intern",
     company: "Habib Bank Limited",
     companyUrl: "https://www.hbl.com",
@@ -54,10 +66,17 @@ const ENTRIES = [
   },
 ];
 
+const CERTS = [
+  { name: "Google Data Analytics Certificate", issuer: "Google",    year: "2024" },
+  { name: "Claude Code Certification",          issuer: "Anthropic", year: "2025" },
+  { name: "Cowork Certification",               issuer: "Anthropic", year: "2025" },
+];
+
 export default function Experience() {
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef  = useRef<HTMLDivElement>(null);
   const listRef    = useRef<HTMLDivElement>(null);
+  const certsRef   = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
     if (headerRef.current) {
@@ -72,6 +91,13 @@ export default function Experience() {
         { y: 24, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.65, stagger: 0.1, ease: "power3.out",
           scrollTrigger: { trigger: listRef.current, start: "top 82%", once: true } }
+      );
+    }
+    if (certsRef.current) {
+      gsap.fromTo(Array.from(certsRef.current.children),
+        { y: 16, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.5, stagger: 0.08, ease: "power3.out",
+          scrollTrigger: { trigger: certsRef.current, start: "top 88%", once: true } }
       );
     }
   }, { scope: sectionRef });
@@ -93,6 +119,7 @@ export default function Experience() {
           </h2>
         </div>
 
+        {/* Experience entries */}
         <div ref={listRef} style={{ display: "flex", flexDirection: "column" }}>
           {ENTRIES.map((entry, i) => (
             <div
@@ -106,7 +133,6 @@ export default function Experience() {
               }}
               className="exp-row"
             >
-              {/* Left — date */}
               <div>
                 <span style={{ fontSize: 13, color: "var(--slate-light)", lineHeight: 1.5 }}>
                   {entry.date}
@@ -124,9 +150,8 @@ export default function Experience() {
                 )}
               </div>
 
-              {/* Right — content */}
               <div>
-                <h3 style={{ fontSize: 18, fontWeight: 600, color: "var(--charcoal)", margin: "0 0 4px", lineHeight: 1.3 }}>
+                <h3 style={{ fontSize: 17, fontWeight: 600, color: "var(--charcoal)", margin: "0 0 4px", lineHeight: 1.3 }}>
                   {entry.role}
                 </h3>
                 {entry.companyUrl ? (
@@ -139,11 +164,10 @@ export default function Experience() {
                 ) : (
                   <span style={{ fontSize: 14, color: "var(--teal-muted)", fontWeight: 500 }}>{entry.company}</span>
                 )}
-
-                <ul style={{ margin: "14px 0 0", padding: 0, display: "flex", flexDirection: "column", gap: 8 }}>
+                <ul style={{ margin: "12px 0 0", padding: 0, display: "flex", flexDirection: "column", gap: 8 }}>
                   {entry.bullets.map((bullet, bi) => (
                     <li key={bi} style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
-                      <span style={{ color: "var(--teal)", marginTop: 6, fontSize: 8, flexShrink: 0 }}>◆</span>
+                      <span style={{ color: "var(--teal)", marginTop: 7, fontSize: 7, flexShrink: 0 }}>◆</span>
                       <span style={{ fontSize: 14, color: "var(--slate)", lineHeight: 1.75 }}>{bullet}</span>
                     </li>
                   ))}
@@ -152,13 +176,40 @@ export default function Experience() {
             </div>
           ))}
 
-          {/* Closing */}
-          <div style={{ borderTop: "1px solid rgba(28,61,53,0.1)", paddingTop: 28 }}>
+          {/* Closing line */}
+          <div style={{ borderTop: "1px solid rgba(28,61,53,0.1)", paddingTop: 24 }}>
             <p style={{ fontSize: 14, fontStyle: "italic", color: "var(--teal-muted)", margin: 0 }}>
               Seeking full-time roles in AI strategy, analytics, consulting, and product management · Graduating June 2026
             </p>
           </div>
         </div>
+
+        {/* Certifications — moved here from Skills */}
+        <div style={{ marginTop: 80 }}>
+          <span className="section-label" style={{ color: "var(--teal-muted)", display: "block", marginBottom: 28 }}>
+            Certifications
+          </span>
+          <div ref={certsRef} style={{ display: "flex", flexDirection: "column" }}>
+            {CERTS.map((cert, i) => (
+              <div
+                key={cert.name}
+                style={{
+                  display: "flex", justifyContent: "space-between", alignItems: "center",
+                  padding: "18px 0",
+                  borderTop: "1px solid rgba(28,61,53,0.08)",
+                  borderBottom: i === CERTS.length - 1 ? "1px solid rgba(28,61,53,0.08)" : "none",
+                }}
+              >
+                <span style={{ fontSize: 15, fontWeight: 500, color: "var(--charcoal)" }}>{cert.name}</span>
+                <div style={{ display: "flex", gap: 24, alignItems: "center" }}>
+                  <span style={{ fontSize: 13, color: "var(--slate-light)" }}>{cert.issuer}</span>
+                  <span style={{ fontSize: 13, color: "var(--teal-muted)", fontWeight: 600 }}>{cert.year}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
       </div>
 
       <style>{`
