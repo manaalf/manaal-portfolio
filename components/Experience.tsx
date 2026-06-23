@@ -9,6 +9,18 @@ gsap.registerPlugin(ScrollTrigger);
 
 const ENTRIES = [
   {
+    isCurrent: false,
+    date: "Jan 2026 – June 2026",
+    role: "Student Consultant — Project Manager & Analytics Lead",
+    company: "PAN Group (UCI Capstone)",
+    companyUrl: null,
+    bullets: [
+      "Led a 6-month consulting engagement for an Australian VC firm to quantify whether purpose-driven companies outperform peers — spanning methodology design, NLP pipeline development, statistical analysis, and client delivery.",
+      "Built an LLM scoring pipeline via Anthropic Batch API to process SEC filings across 904 NYSE companies and 20 GICS sectors; OLS regression established statistically significant purpose-performance correlation (r = 0.265, p < 0.001).",
+      "Delivered quadrant classification framework and interactive Tableau dashboard scoped for immediate redeployment in client due diligence.",
+    ],
+  },
+  {
     isCurrent: true,
     date: "Feb 2025 – May 2025",
     role: "Project Trainee",
@@ -19,18 +31,7 @@ const ENTRIES = [
       "Managed a talent portfolio of 2,000+ applicants for The League program, streamlining selection and onboarding.",
     ],
   },
-  {
-    isCurrent: false,
-    date: "Sep 2024 – Mar 2025",
-    role: "Student Consultant — Project Manager & Analytics Lead",
-    company: "PAN Group (UCI Capstone)",
-    companyUrl: null,
-    bullets: [
-      "Led a 6-month consulting engagement for an Australian VC firm to quantify whether purpose-driven companies outperform peers — spanning methodology design, NLP pipeline development, statistical analysis, and client delivery.",
-      "Built an LLM scoring pipeline via Anthropic Batch API to process SEC filings across 904 NYSE companies and 20 GICS sectors; OLS regression established statistically significant purpose-performance correlation (r = 0.265, p < 0.001).",
-      "Delivered quadrant classification framework and interactive Tableau dashboard scoped for immediate redeployment in client due diligence.",
-    ],
-  },
+  
   {
     isCurrent: false,
     date: "Jun 2023 – Jul 2023",
@@ -67,9 +68,9 @@ const ENTRIES = [
 ];
 
 const CERTS = [
-  { name: "Google Data Analytics Certificate", issuer: "Google",    year: "2024" },
-  { name: "Claude Code Certification",          issuer: "Anthropic", year: "2025" },
-  { name: "Cowork Certification",               issuer: "Anthropic", year: "2025" },
+  { name: "Google Data Analytics Certificate", issuer: "Google",    year: "2025" },
+  { name: "Claude Code Certification",          issuer: "Anthropic", year: "2026" },
+  { name: "Cowork Certification",               issuer: "Anthropic", year: "2026" },
 ];
 
 export default function Experience() {
