@@ -50,7 +50,7 @@ export const projects = [
     tags: ["Python", "RAG", "Gemini", "PDF Parsing", "Streamlit"],
     github: "https://github.com/manaalf/PolicyPal",
     streamlit: "https://gemini-policypal-35nyxxllhmj6k8djrgvxaw.streamlit.app",
-    slidesEmbed: "https://docs.google.com/presentation/d/1HHkv4y7fdQBogzcRfcex0TRhzOTbpzdmrP8OMYIOCKg/embed?start=false&loop=false&delayms=3000",
+    slidesEmbed: "https://docs.google.com/presentation/d/1HHkv4y7fdQBogzcRfcex0TRhzOTbpzdmrP8OMYIOCKg/edit?usp=sharing",
     challenge: "US health insurance is genuinely hard to navigate — especially for international students. AI tools answer questions using generic knowledge that doesn't apply to your specific policy. Wrong answers in insurance aren't just unhelpful, they're harmful.",
     approach: "Built a RAG system that ingests your actual policy PDF and answers questions exclusively from that document. Designed explicit anti-hallucination constraints: context-only answering, similarity threshold filtering, and structured answer templates that force source attribution.",
     impact: "The system cannot answer from outside your document. Every response is grounded in the specific policy you uploaded, with the source chunk cited. Demoed live to a class audience as a working product.",
