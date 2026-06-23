@@ -10,11 +10,11 @@ const particleOptions: ISourceOptions = {
   fpsLimit: 60,
   interactivity: {
     events: { onHover: { enable: true, mode: "grab" } },
-    modes: { grab: { distance: 120, links: { opacity: 0.5 } } },
+    modes: { grab: { distance: 120, links: { opacity: 0.8 } } },
   },
   particles: {
     color: { value: "#3EBFA0" },
-    links: { color: "#3EBFA0", distance: 130, enable: true, opacity: 0.35, width: 1 },
+    links: { color: "#3EBFA0", distance: 130, enable: true, opacity: 0.6, width: 1 },
     move: { enable: true, speed: 0.5, direction: "none", random: true, outModes: { default: "bounce" } },
     number: { density: { enable: true }, value: 55 },
     opacity: { value: 0.55 },
