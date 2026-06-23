@@ -80,7 +80,7 @@ export default function Experience() {
     <section
       id="experience"
       ref={sectionRef}
-      style={{ backgroundColor: "var(--cream)", padding: "120px 0" }}
+      style={{ backgroundColor: "var(--cream)", padding: "120px 0", position: "relative", zIndex: 2 }}
     >
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 48px" }}>
 

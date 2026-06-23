@@ -10,7 +10,8 @@ import Contact from "../components/Contact";
 export default function Home() {
   return (
     <main style={{ position: "relative" }}>
-      {/* Fixed particle layer — z-index 1, behind all content */}
+      {/* Particles fixed behind everything — visible on forest green sections, 
+          hidden on cream sections because cream bg covers them */}
       <ParticleBackgroundClient />
       <Navigation />
       <Hero />
