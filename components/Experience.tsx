@@ -21,7 +21,7 @@ const ENTRIES = [
     ],
   },
   {
-    isCurrent: true,
+    isCurrent: false,
     date: "Feb 2025 – May 2025",
     role: "Project Trainee",
     company: "Habib Bank Limited",
