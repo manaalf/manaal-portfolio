@@ -63,7 +63,7 @@ export default function Hero() {
       <div
         ref={contentRef}
         style={{
-          position: "relative", zIndex: 3,
+          position: "relative", zIndex: 11,
           display: "flex", flexDirection: "column",
           alignItems: "center", textAlign: "center",
           gap: 20, padding: "0 24px", maxWidth: 720, width: "100%",

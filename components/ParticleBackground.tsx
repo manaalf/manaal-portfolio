@@ -38,7 +38,7 @@ export default function ParticleBackground() {
   return (
     <Particles
       id="tsparticles"
-      style={{ position: "fixed", inset: 0, zIndex: 1, pointerEvents: "none" }}
+      style={{ position: "fixed", inset: 0, zIndex: 10, pointerEvents: "none" }}
       options={particleOptions}
     />
   );
