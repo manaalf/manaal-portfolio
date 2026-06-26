@@ -6,111 +6,134 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { projects } from "../data/projects";
-import SpotlightCard from "./SpotlightCard";
 
 gsap.registerPlugin(ScrollTrigger);
 
 type Project = (typeof projects)[number];
 
-interface CardProps {
-  project: Project;
-  isActive: boolean;
-  onClick: () => void;
-  style?: CSSProperties;
-}
-
-const PROJECT_ACCENTS = [
-  { top: "#2A7A5E", bg: "#F0FAF6", tagBg: "rgba(42,122,94,0.08)", tagColor: "#2A7A5E" },
-  { top: "#5B3A8C", bg: "#F7F4FD", tagBg: "rgba(91,58,140,0.08)", tagColor: "#5B3A8C" },
-  { top: "#C0392B", bg: "#FDF5F5", tagBg: "rgba(192,57,43,0.08)", tagColor: "#C0392B" },
-  { top: "#1A5276", bg: "#F4F8FC", tagBg: "rgba(26,82,118,0.08)", tagColor: "#1A5276" },
-];
-
-function CardTop({ project, accent }: { project: Project; accent: typeof PROJECT_ACCENTS[0] }) {
-  return (
-    <>
-      <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.16em", textTransform: "uppercase", color: accent.top }}>
-        {project.category}
-      </span>
-      <h3 style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 700, color: "var(--forest)", margin: "10px 0 6px", lineHeight: 1.2 }}>
-        {project.title}
-      </h3>
-      <p style={{ fontSize: 14, color: "var(--slate)", margin: 0, lineHeight: 1.6 }}>
-        {project.hook}
-      </p>
-    </>
-  );
-}
-
-function CardMetric({ project, accent }: { project: Project; accent: typeof PROJECT_ACCENTS[0] }) {
-  return (
-    <div style={{ backgroundColor: accent.tagBg, borderLeft: `3px solid ${accent.top}`, padding: "12px 16px", margin: "16px 0", borderRadius: "0 4px 4px 0" }}>
-      <span style={{ fontFamily: "var(--font-display)", fontSize: 26, fontWeight: 700, color: accent.top, display: "block", lineHeight: 1 }}>
-        {project.metric}
-      </span>
-      <span style={{ fontSize: 12, color: "var(--slate)", marginTop: 4, display: "block" }}>
-        {project.metricLabel}
-      </span>
-    </div>
-  );
-}
-
-function CardTags({ project, accent }: { project: Project; accent: typeof PROJECT_ACCENTS[0] }) {
-  return (
-    <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 16 }}>
-      {project.tags.map(t => (
-        <span key={t} style={{ fontSize: 11, fontWeight: 500, padding: "4px 10px", borderRadius: 3, backgroundColor: accent.tagBg, color: accent.tagColor, letterSpacing: "0.04em" }}>
-          {t}
-        </span>
-      ))}
-    </div>
-  );
-}
-
-function ProjectCard({ project, isActive, onClick, style }: CardProps) {
-  const idx = projects.indexOf(project);
-  const accent = PROJECT_ACCENTS[idx] ?? PROJECT_ACCENTS[0];
+function ProjectCard({ project, isActive, onClick }: { project: Project; isActive: boolean; onClick: () => void }) {
+  const [thumbError, setThumbError] = useState(false);
 
   return (
-    <SpotlightCard onClick={onClick} borderColor={`${accent.top}25`} borderHoverColor={`${accent.top}60`}
-      style={{ backgroundColor: accent.bg, display: "flex", flexDirection: "column", ...style }}>
-      <div style={{ height: 3, backgroundColor: accent.top, flexShrink: 0 }} />
-      <div style={{ padding: 28, display: "flex", flexDirection: "column", flex: 1, minHeight: 380 }}>
-        <CardTop project={project} accent={accent} />
-        <CardMetric project={project} accent={accent} />
-        <div style={{ flex: 1 }} />
-        <CardTags project={project} accent={accent} />
-        {/* View on GitHub */}
-        <div style={{ display: "flex", gap: 12, marginTop: 20, flexWrap: "wrap" }}>
-          <a href={project.github} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}
-            style={{ fontSize: 12, fontWeight: 600, color: accent.top, border: `1px solid ${accent.top}40`, padding: "6px 12px", borderRadius: 4, transition: "all 0.2s ease", letterSpacing: "0.04em" }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = accent.tagBg; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "transparent"; }}>
-            View on GitHub ↗
-          </a>
-          {project.streamlit && (
-            <a href={project.streamlit} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}
-              style={{ fontSize: 12, fontWeight: 600, color: accent.top, border: `1px solid ${accent.top}40`, padding: "6px 12px", borderRadius: 4, transition: "all 0.2s ease", letterSpacing: "0.04em" }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = accent.tagBg; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "transparent"; }}>
-              Live Demo ↗
+    <div
+      onClick={onClick}
+      style={{
+        backgroundColor: "#EDE7D9",
+        border: "1px solid rgba(28,61,53,0.12)",
+        borderRadius: 4,
+        overflow: "hidden",
+        cursor: "pointer",
+        transition: "box-shadow 0.3s ease, transform 0.2s ease",
+        height: "100%",
+      }}
+      onMouseEnter={(e) => {
+        (e.currentTarget as HTMLDivElement).style.boxShadow = "0 8px 32px rgba(28,61,53,0.12)";
+        (e.currentTarget as HTMLDivElement).style.transform = "translateY(-2px)";
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
+        (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)";
+      }}
+    >
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", minHeight: 380 }}>
+
+        {/* Left — slide thumbnail */}
+        <div style={{ backgroundColor: "#1C3D35", padding: 28, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          <div>
+            <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.14em", color: "#3EBFA0", marginBottom: 16 }}>
+              SLIDE PREVIEW
+            </div>
+            {!thumbError ? (
+              <img
+                src={project.slideThumb}
+                alt={`${project.title} slide`}
+                onError={() => setThumbError(true)}
+                style={{ width: "100%", borderRadius: 2, display: "block", border: "1px solid rgba(62,191,160,0.2)" }}
+              />
+            ) : (
+              /* Fallback if image doesn't load */
+              <div style={{ backgroundColor: "rgba(62,191,160,0.08)", border: "1px solid rgba(62,191,160,0.2)", borderRadius: 3, padding: "24px 20px" }}>
+                <div style={{ fontFamily: "Georgia, serif", fontSize: 16, fontWeight: 700, color: "#F5F0E8", lineHeight: 1.3, marginBottom: 12 }}>
+                  {project.title}
+                </div>
+                <div style={{ fontSize: 11, color: "rgba(245,240,232,0.45)" }}>{project.category}</div>
+              </div>
+            )}
+          </div>
+          <div style={{ fontSize: 11, color: "rgba(245,240,232,0.35)", fontStyle: "italic", marginTop: 16 }}>
+            Click to view full presentation →
+          </div>
+        </div>
+
+        {/* Right — content */}
+        <div style={{ padding: 28, display: "flex", flexDirection: "column", gap: 16, backgroundColor: project.bgColor }}>
+          <div>
+            <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.16em", color: project.accentColor, marginBottom: 10 }}>
+              {project.category}
+            </div>
+            <h3 style={{ fontFamily: "Georgia, serif", fontSize: 19, fontWeight: 700, color: "#1C3D35", margin: "0 0 8px", lineHeight: 1.25, fontStyle: "italic" }}>
+              {project.question}
+            </h3>
+            <p style={{ fontSize: 13, color: "#4A5568", margin: 0, lineHeight: 1.7 }}>
+              {project.description}
+            </p>
+          </div>
+
+          {/* Stat */}
+          <div style={{ borderLeft: `3px solid ${project.accentColor}`, paddingLeft: 14 }}>
+            <div style={{ fontFamily: "Georgia, serif", fontSize: 22, fontWeight: 700, color: "#1C3D35", lineHeight: 1 }}>
+              {project.stat}
+            </div>
+            <div style={{ fontSize: 12, color: "#718096", marginTop: 4 }}>
+              {project.statLabel}
+            </div>
+          </div>
+
+          {/* Tags */}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+            {project.tags.map(t => (
+              <span key={t} style={{ fontSize: 11, color: project.accentColor, border: `1px solid ${project.accentColor}30`, padding: "3px 10px", borderRadius: 3 }}>
+                {t}
+              </span>
+            ))}
+          </div>
+
+          {/* Links */}
+          <div style={{ display: "flex", gap: 20, marginTop: "auto", paddingTop: 12, borderTop: "1px solid rgba(28,61,53,0.08)" }}>
+            <button
+              onClick={(e) => { e.stopPropagation(); onClick(); }}
+              style={{ fontSize: 13, fontWeight: 600, color: "#1C3D35", background: "none", border: "none", padding: 0, cursor: "pointer", textDecoration: "underline", textUnderlineOffset: 3 }}
+            >
+              View slides
+            </button>
+            
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              style={{ fontSize: 13, color: "#718096", textDecoration: "underline", textUnderlineOffset: 3 }}
+            >
+              GitHub
             </a>
-          )}
-          <button onClick={onClick}
-            style={{ fontSize: 12, fontWeight: 600, color: "var(--cream)", backgroundColor: accent.top, border: "none", padding: "6px 14px", borderRadius: 4, cursor: "pointer", letterSpacing: "0.04em" }}>
-            View Slides →
-          </button>
+            {project.streamlit && (
+              
+                href={project.streamlit}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                style={{ fontSize: 13, color: "#718096", textDecoration: "underline", textUnderlineOffset: 3 }}
+              >
+                Live demo
+              </a>
+            )}
+          </div>
         </div>
       </div>
-    </SpotlightCard>
+    </div>
   );
 }
 
-// ── MODAL with Google Slides embed ────────────────────────────────────────────
 function ProjectModal({ project, onClose }: { project: Project; onClose: () => void }) {
-  const idx = projects.indexOf(project);
-  const accent = PROJECT_ACCENTS[idx] ?? PROJECT_ACCENTS[0];
-
   useEffect(() => {
     const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", handler);
@@ -123,43 +146,38 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
   }, []);
 
   return (
-    <div onClick={onClose} style={{ position: "fixed", inset: 0, zIndex: 200, backgroundColor: "rgba(28,61,53,0.75)", backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)", display: "flex", alignItems: "center", justifyContent: "center", padding: "24px 16px" }}>
-      <div onClick={(e) => e.stopPropagation()} style={{ backgroundColor: "var(--cream)", borderRadius: 8, maxWidth: 860, width: "100%", maxHeight: "90vh", overflowY: "auto", position: "relative", border: `1px solid ${accent.top}20` }}>
-
-        {/* Header */}
-        <div style={{ padding: "28px 32px 20px", borderBottom: `1px solid ${accent.top}20`, display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+    <div
+      onClick={onClose}
+      style={{ position: "fixed", inset: 0, zIndex: 200, backgroundColor: "rgba(28,61,53,0.75)", backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)", display: "flex", alignItems: "center", justifyContent: "center", padding: "24px 16px" }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{ backgroundColor: "#F5F0E8", borderRadius: 6, maxWidth: 860, width: "100%", maxHeight: "90vh", overflowY: "auto", position: "relative" }}
+      >
+        <div style={{ padding: "24px 28px 16px", display: "flex", justifyContent: "space-between", alignItems: "flex-start", borderBottom: "1px solid rgba(28,61,53,0.1)" }}>
           <div>
-            <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.16em", textTransform: "uppercase", color: accent.top }}>{project.category}</span>
-            <h2 style={{ fontFamily: "var(--font-display)", fontSize: 26, fontWeight: 700, color: "var(--forest)", margin: "8px 0 4px" }}>{project.title}</h2>
-            <p style={{ fontSize: 14, color: "var(--slate)", margin: 0, fontStyle: "italic" }}>{project.hook}</p>
+            <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.16em", color: project.accentColor, marginBottom: 6 }}>{project.category}</div>
+            <h2 style={{ fontFamily: "Georgia, serif", fontSize: 22, fontWeight: 700, color: "#1C3D35", margin: 0, fontStyle: "italic" }}>{project.question}</h2>
           </div>
-          <button onClick={onClose} style={{ background: "none", border: "none", color: "var(--slate-light)", fontSize: 22, cursor: "pointer", padding: "4px 8px", flexShrink: 0, marginLeft: 16 }}>✕</button>
+          <button onClick={onClose} style={{ background: "none", border: "none", fontSize: 20, cursor: "pointer", color: "#718096", padding: "4px 8px", flexShrink: 0 }}>✕</button>
         </div>
 
-        {/* Google Slides embed */}
-        <div style={{ padding: "0", backgroundColor: "#000" }}>
-          <iframe
-            src={project.slidesEmbed}
-            style={{ width: "100%", height: 480, border: "none", display: "block" }}
-            allowFullScreen
-            title={`${project.title} presentation`}
-          />
-        </div>
+        <iframe
+          src={project.slidesEmbed}
+          style={{ width: "100%", height: 480, border: "none", display: "block" }}
+          allowFullScreen
+          title={project.title}
+        />
 
-        {/* Links */}
-        <div style={{ padding: "20px 32px 28px", display: "flex", gap: 12, flexWrap: "wrap" }}>
+        <div style={{ padding: "16px 28px 24px", display: "flex", gap: 12, flexWrap: "wrap" }}>
           <a href={project.github} target="_blank" rel="noopener noreferrer"
-            style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 600, backgroundColor: accent.top, color: "#fff", padding: "10px 20px", borderRadius: 6, transition: "opacity 0.2s ease" }}
-            onMouseEnter={(e) => ((e.currentTarget as HTMLAnchorElement).style.opacity = "0.85")}
-            onMouseLeave={(e) => ((e.currentTarget as HTMLAnchorElement).style.opacity = "1")}>
+            style={{ fontSize: 13, fontWeight: 600, backgroundColor: project.accentColor, color: "#fff", padding: "10px 20px", borderRadius: 5, textDecoration: "none" }}>
             View on GitHub ↗
           </a>
           {project.streamlit && (
             <a href={project.streamlit} target="_blank" rel="noopener noreferrer"
-              style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 600, backgroundColor: "transparent", color: "var(--forest)", padding: "10px 20px", borderRadius: 6, border: "2px solid var(--forest)", transition: "opacity 0.2s ease" }}
-              onMouseEnter={(e) => ((e.currentTarget as HTMLAnchorElement).style.opacity = "0.75")}
-              onMouseLeave={(e) => ((e.currentTarget as HTMLAnchorElement).style.opacity = "1")}>
-              Live Demo ↗
+              style={{ fontSize: 13, fontWeight: 600, backgroundColor: "transparent", color: "#1C3D35", padding: "10px 20px", borderRadius: 5, border: "2px solid #1C3D35", textDecoration: "none" }}>
+              Live demo ↗
             </a>
           )}
         </div>
@@ -168,11 +186,10 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
   );
 }
 
-// ── MAIN ─────────────────────────────────────────────────────────────────────
 export default function Projects() {
   const sectionRef  = useRef<HTMLElement>(null);
   const headerRef   = useRef<HTMLDivElement>(null);
-  const carouselRef = useRef<HTMLDivElement>(null);
+  const listRef     = useRef<HTMLDivElement>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const [activeIndex, setActiveIndex]   = useState(0);
@@ -183,73 +200,64 @@ export default function Projects() {
 
   const startTimer = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
-    intervalRef.current = setInterval(() => setActiveIndex(i => (i + 1) % projects.length), 4500);
+    intervalRef.current = setInterval(() => setActiveIndex(i => (i + 1) % projects.length), 5000);
   }, []);
   const stopTimer = useCallback(() => {
     if (intervalRef.current) { clearInterval(intervalRef.current); intervalRef.current = null; }
   }, []);
 
   useEffect(() => { startTimer(); return stopTimer; }, [startTimer, stopTimer]);
-
-  const goTo   = useCallback((i: number) => { setActiveIndex(i); startTimer(); }, [startTimer]);
-  const goPrev = () => goTo((activeIndex - 1 + projects.length) % projects.length);
-  const goNext = () => goTo((activeIndex + 1) % projects.length);
-  const prevIdx = (activeIndex - 1 + projects.length) % projects.length;
-  const nextIdx = (activeIndex + 1) % projects.length;
+  const goTo = useCallback((i: number) => { setActiveIndex(i); startTimer(); }, [startTimer]);
 
   useGSAP(() => {
     if (headerRef.current) {
       gsap.fromTo(Array.from(headerRef.current.children), { y: 32, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, stagger: 0.15, ease: "power3.out", scrollTrigger: { trigger: headerRef.current, start: "top 80%", once: true } });
+        { y: 0, opacity: 1, duration: 0.8, stagger: 0.15, ease: "power3.out",
+          scrollTrigger: { trigger: headerRef.current, start: "top 80%", once: true } });
     }
-    if (carouselRef.current) {
-      gsap.fromTo(carouselRef.current, { y: 48, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.9, ease: "power3.out", scrollTrigger: { trigger: carouselRef.current, start: "top 80%", once: true } });
+    if (listRef.current) {
+      gsap.fromTo(listRef.current, { y: 48, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.9, ease: "power3.out",
+          scrollTrigger: { trigger: listRef.current, start: "top 80%", once: true } });
     }
   }, { scope: sectionRef });
 
   return (
-    <section id="work" ref={sectionRef} style={{ backgroundColor: "var(--cream-dark)", padding: "120px 0", position: "relative", zIndex: 2 }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 48px" }}>
+    <section id="work" ref={sectionRef} style={{ backgroundColor: "#EDE7D9", padding: "120px 0", position: "relative", zIndex: 2 }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 48px" }}>
 
-        <div ref={headerRef} style={{ marginBottom: 64 }}>
-          <span className="section-label" style={{ color: "var(--teal-muted)", display: "block", marginBottom: 16 }}>Work</span>
-          <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px,4vw,52px)", fontWeight: 700, color: "var(--forest)", margin: 0, lineHeight: 1.1 }}>
+        <div ref={headerRef} style={{ marginBottom: 56 }}>
+          <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: "#2E9B82", display: "block", marginBottom: 16 }}>Work</span>
+          <h2 style={{ fontFamily: "Georgia, serif", fontSize: "clamp(36px,4vw,52px)", fontWeight: 700, color: "#1C3D35", margin: "0 0 12px", lineHeight: 1.1 }}>
             Selected Projects
           </h2>
-          <p style={{ fontSize: 15, color: "var(--slate)", margin: "12px 0 0" }}>Click any card to view the full presentation.</p>
+          <p style={{ fontSize: 14, color: "#718096", margin: 0 }}>Click any card to view the full presentation.</p>
         </div>
 
-        <div ref={carouselRef} onMouseEnter={stopTimer} onMouseLeave={startTimer}>
-          <div style={{ display: "flex", gap: 20, alignItems: "stretch" }}>
-            <div className="hidden lg:block" style={{ flex: "0 0 25%", opacity: 0.4, transition: "opacity 0.4s ease", cursor: "pointer" }}>
-              <ProjectCard project={projects[prevIdx]} isActive={false} onClick={goPrev} style={{ width: "100%", height: "100%" }} />
-            </div>
-            <div style={{ flex: "1 1 auto" }}>
-              <ProjectCard project={projects[activeIndex]} isActive={true} onClick={() => setModalProject(projects[activeIndex])} style={{ height: "100%" }} />
-            </div>
-            <div className="hidden lg:block" style={{ flex: "0 0 25%", opacity: 0.4, transition: "opacity 0.4s ease", cursor: "pointer" }}>
-              <ProjectCard project={projects[nextIdx]} isActive={false} onClick={goNext} style={{ width: "100%", height: "100%" }} />
-            </div>
-          </div>
+        {/* Single active card */}
+        <div ref={listRef} onMouseEnter={stopTimer} onMouseLeave={startTimer}>
+          <ProjectCard
+            project={projects[activeIndex]}
+            isActive={true}
+            onClick={() => setModalProject(projects[activeIndex])}
+          />
 
-          {/* Arrows */}
-          <div style={{ display: "flex", justifyContent: "center", gap: 12, marginTop: 36 }}>
-            {[{ label: "Previous", icon: "←", fn: goPrev }, { label: "Next", icon: "→", fn: goNext }].map(({ label, icon, fn }) => (
-              <button key={icon} onClick={fn} aria-label={label}
-                style={{ width: 44, height: 44, borderRadius: "50%", backgroundColor: "var(--cream)", border: "1.5px solid rgba(28,61,53,0.2)", color: "var(--slate)", fontSize: 18, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s ease" }}
-                onMouseEnter={(e) => { const b = e.currentTarget as HTMLButtonElement; b.style.borderColor = "var(--forest)"; b.style.color = "var(--forest)"; }}
-                onMouseLeave={(e) => { const b = e.currentTarget as HTMLButtonElement; b.style.borderColor = "rgba(28,61,53,0.2)"; b.style.color = "var(--slate)"; }}>
-                {icon}
+          {/* Dot navigation */}
+          <div style={{ display: "flex", justifyContent: "center", gap: 10, marginTop: 32, alignItems: "center" }}>
+            {projects.map((p, i) => (
+              <button
+                key={i}
+                onClick={() => goTo(i)}
+                style={{
+                  background: "none", border: "none", cursor: "pointer", padding: "4px 0",
+                  display: "flex", flexDirection: "column", alignItems: "center", gap: 6,
+                }}
+              >
+                <div style={{ width: i === activeIndex ? 32 : 8, height: 4, borderRadius: 2, backgroundColor: i === activeIndex ? "#1C3D35" : "rgba(28,61,53,0.2)", transition: "width 0.3s ease, background-color 0.3s ease" }} />
+                {i === activeIndex && (
+                  <span style={{ fontSize: 11, color: "#1C3D35", fontWeight: 600, letterSpacing: "0.06em" }}>{p.category}</span>
+                )}
               </button>
-            ))}
-          </div>
-
-          {/* Dots */}
-          <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 20 }}>
-            {projects.map((_, i) => (
-              <button key={i} onClick={() => goTo(i)}
-                style={{ width: i === activeIndex ? 24 : 8, height: 8, borderRadius: 4, backgroundColor: i === activeIndex ? "var(--forest)" : "rgba(28,61,53,0.2)", border: "none", cursor: "pointer", padding: 0, transition: "width 0.3s ease, background-color 0.3s ease" }} />
             ))}
           </div>
         </div>
