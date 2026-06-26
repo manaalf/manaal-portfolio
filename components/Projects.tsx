@@ -12,44 +12,40 @@ gsap.registerPlugin(ScrollTrigger);
 
 type Project = (typeof projects)[number];
 
-function ProjectCard({ project, onClick }: { project: Project; isActive: boolean; onClick: () => void }) {
+function ProjectCard({ project, isActive, onClick }: { project: Project; isActive: boolean; onClick: () => void }) {
   return (
-    <div onClick={onClick} style={{ backgroundColor: "#EDE7D9", border: "1px solid rgba(28,61,53,0.12)", borderRadius: 4, overflow: "hidden", cursor: "pointer", transition: "box-shadow 0.3s ease, transform 0.2s ease" }}
-      onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.boxShadow = "0 8px 32px rgba(28,61,53,0.12)"; (e.currentTarget as HTMLDivElement).style.transform = "translateY(-2px)"; }}
-      onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.boxShadow = "none"; (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)"; }}>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", minHeight: 380 }}>
-        <div style={{ backgroundColor: "#1C3D35", display: "flex", flexDirection: "column", overflow: "hidden" }}>
-          <div style={{ padding: "16px 20px 8px", fontSize: 10, fontWeight: 600, letterSpacing: "0.14em", color: "#3EBFA0", flexShrink: 0 }}>SLIDE PREVIEW</div>
-          <iframe
-            src={project.slidesEmbed}
-            style={{ width: "100%", flex: 1, minHeight: 300, border: "none", display: "block", pointerEvents: "none" }}
-            title={project.title}
-          />
-          <div style={{ padding: "8px 20px 14px", fontSize: 11, color: "rgba(245,240,232,0.3)", fontStyle: "italic", flexShrink: 0 }}>Click to interact with slides</div>
-        </div>
-        <div style={{ padding: 28, display: "flex", flexDirection: "column", gap: 16, backgroundColor: project.bgColor }}>
-          <div>
-            <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.16em", color: project.accentColor, marginBottom: 10 }}>{project.category}</div>
-            <h3 style={{ fontFamily: "Georgia, serif", fontSize: 19, fontWeight: 700, color: "#1C3D35", margin: "0 0 8px", lineHeight: 1.25, fontStyle: "italic" }}>{project.question}</h3>
+    <div onClick={onClick} style={{ backgroundColor: project.bgColor, border: "1px solid rgba(28,61,53,0.1)", borderRadius: 6, overflow: "hidden", cursor: "pointer", transition: "box-shadow 0.3s ease", height: "100%", display: "flex", flexDirection: "column" }}
+      onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.boxShadow = "0 8px 32px rgba(28,61,53,0.12)"; }}
+      onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.boxShadow = "none"; }}>
+      <div style={{ position: "relative", width: "100%", paddingTop: "56%", backgroundColor: "#1C3D35", flexShrink: 0, overflow: "hidden" }}>
+        <iframe
+          src={project.slidesEmbed}
+          style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: "none", pointerEvents: isActive ? "auto" : "none" }}
+          title={project.title}
+        />
+        {!isActive && (
+          <div style={{ position: "absolute", inset: 0, backgroundColor: "rgba(28,61,53,0.3)" }} />
+        )}
+      </div>
+      <div style={{ padding: "20px 22px 22px", display: "flex", flexDirection: "column", gap: 12, flex: 1 }}>
+        <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.16em", color: project.accentColor }}>{project.category}</div>
+        <h3 style={{ fontFamily: "Georgia, serif", fontSize: isActive ? 18 : 15, fontWeight: 700, color: "#1C3D35", margin: 0, lineHeight: 1.3, fontStyle: "italic" }}>{project.question}</h3>
+        {isActive && (
+          <>
             <p style={{ fontSize: 13, color: "#4A5568", margin: 0, lineHeight: 1.7 }}>{project.description}</p>
-          </div>
-          <div style={{ borderLeft: "3px solid " + project.accentColor, paddingLeft: 14 }}>
-            <div style={{ fontFamily: "Georgia, serif", fontSize: 22, fontWeight: 700, color: "#1C3D35", lineHeight: 1 }}>{project.stat}</div>
-            <div style={{ fontSize: 12, color: "#718096", marginTop: 4 }}>{project.statLabel}</div>
-          </div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-            {project.tags.map(t => (
-              <span key={t} style={{ fontSize: 11, color: project.accentColor, border: "1px solid " + project.accentColor + "30", padding: "3px 10px", borderRadius: 3 }}>{t}</span>
-            ))}
-          </div>
-          <div style={{ display: "flex", gap: 20, marginTop: "auto", paddingTop: 12, borderTop: "1px solid rgba(28,61,53,0.08)" }}>
-            <button onClick={(e: React.MouseEvent) => { e.stopPropagation(); onClick(); }} style={{ fontSize: 13, fontWeight: 600, color: "#1C3D35", background: "none", border: "none", padding: 0, cursor: "pointer", textDecoration: "underline", textUnderlineOffset: 3 }}>View slides</button>
-            <a href={project.github} target="_blank" rel="noopener noreferrer" onClick={(e: React.MouseEvent) => e.stopPropagation()} style={{ fontSize: 13, color: "#718096", textDecoration: "underline", textUnderlineOffset: 3 }}>GitHub</a>
-            {project.streamlit && (
-              <a href={project.streamlit} target="_blank" rel="noopener noreferrer" onClick={(e: React.MouseEvent) => e.stopPropagation()} style={{ fontSize: 13, color: "#718096", textDecoration: "underline", textUnderlineOffset: 3 }}>Live demo</a>
-            )}
-          </div>
-        </div>
+            <div style={{ borderLeft: "3px solid " + project.accentColor, paddingLeft: 12 }}>
+              <div style={{ fontFamily: "Georgia, serif", fontSize: 20, fontWeight: 700, color: "#1C3D35", lineHeight: 1 }}>{project.stat}</div>
+              <div style={{ fontSize: 12, color: "#718096", marginTop: 3 }}>{project.statLabel}</div>
+            </div>
+            <div style={{ display: "flex", gap: 16, paddingTop: 8, borderTop: "1px solid rgba(28,61,53,0.08)", marginTop: "auto" }}>
+              <button onClick={(e: React.MouseEvent) => { e.stopPropagation(); onClick(); }} style={{ fontSize: 12, fontWeight: 600, color: "#1C3D35", background: "none", border: "none", padding: 0, cursor: "pointer", textDecoration: "underline", textUnderlineOffset: 3 }}>View full slides</button>
+              <a href={project.github} target="_blank" rel="noopener noreferrer" onClick={(e: React.MouseEvent) => e.stopPropagation()} style={{ fontSize: 12, color: "#718096", textDecoration: "underline", textUnderlineOffset: 3 }}>GitHub</a>
+              {project.streamlit && (
+                <a href={project.streamlit} target="_blank" rel="noopener noreferrer" onClick={(e: React.MouseEvent) => e.stopPropagation()} style={{ fontSize: 12, color: "#718096", textDecoration: "underline", textUnderlineOffset: 3 }}>Live demo</a>
+              )}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
@@ -90,7 +86,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
 export default function Projects() {
   const sectionRef  = useRef<HTMLElement>(null);
   const headerRef   = useRef<HTMLDivElement>(null);
-  const listRef     = useRef<HTMLDivElement>(null);
+  const carouselRef = useRef<HTMLDivElement>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [activeIndex, setActiveIndex]   = useState(0);
   const [modalProject, setModalProject] = useState<Project | null>(null);
@@ -105,45 +101,55 @@ export default function Projects() {
   }, []);
   useEffect(() => { startTimer(); return stopTimer; }, [startTimer, stopTimer]);
   const goTo = useCallback((i: number) => { setActiveIndex(i); startTimer(); }, [startTimer]);
+  const prevIdx = (activeIndex - 1 + projects.length) % projects.length;
+  const nextIdx = (activeIndex + 1) % projects.length;
   useGSAP(() => {
     if (headerRef.current) {
       gsap.fromTo(Array.from(headerRef.current.children), { y: 32, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, stagger: 0.15, ease: "power3.out", scrollTrigger: { trigger: headerRef.current, start: "top 80%", once: true } });
     }
-    if (listRef.current) {
-      gsap.fromTo(listRef.current, { y: 48, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: "power3.out", scrollTrigger: { trigger: listRef.current, start: "top 80%", once: true } });
+    if (carouselRef.current) {
+      gsap.fromTo(carouselRef.current, { y: 48, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: "power3.out", scrollTrigger: { trigger: carouselRef.current, start: "top 80%", once: true } });
     }
   }, { scope: sectionRef });
   return (
     <section id="work" ref={sectionRef} style={{ backgroundColor: "#EDE7D9", padding: "120px 0", position: "relative", zIndex: 2 }}>
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 48px" }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 48px" }}>
         <div ref={headerRef} style={{ marginBottom: 56 }}>
           <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: "#2E9B82", display: "block", marginBottom: 16 }}>Work</span>
           <h2 style={{ fontFamily: "Georgia, serif", fontSize: "clamp(36px,4vw,52px)", fontWeight: 700, color: "#1C3D35", margin: "0 0 12px", lineHeight: 1.1 }}>Selected Projects</h2>
-          <p style={{ fontSize: 14, color: "#718096", margin: 0 }}>Click any card to view the full presentation.</p>
+          <p style={{ fontSize: 14, color: "#718096", margin: 0 }}>Scroll through or click any project to view the full presentation.</p>
         </div>
-        <div ref={listRef} onMouseEnter={stopTimer} onMouseLeave={startTimer}>
-          <ProjectCard project={projects[activeIndex]} isActive={true} onClick={() => setModalProject(projects[activeIndex])} />
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 16, marginTop: 28 }}>
-            <button onClick={() => goTo((activeIndex - 1 + projects.length) % projects.length)}
-              style={{ background: "none", border: "1.5px solid rgba(28,61,53,0.25)", borderRadius: "50%", width: 40, height: 40, cursor: "pointer", fontSize: 18, color: "#1C3D35", display: "flex", alignItems: "center", justifyContent: "center", transition: "border-color 0.2s ease" }}
+        <div ref={carouselRef} onMouseEnter={stopTimer} onMouseLeave={startTimer}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr 1fr", gap: 16, alignItems: "start" }}>
+            <div style={{ opacity: 0.5, cursor: "pointer", transition: "opacity 0.3s ease" }} onClick={() => goTo(prevIdx)}
+              onMouseEnter={(e) => (e.currentTarget as HTMLDivElement).style.opacity = "0.7"}
+              onMouseLeave={(e) => (e.currentTarget as HTMLDivElement).style.opacity = "0.5"}>
+              <ProjectCard project={projects[prevIdx]} isActive={false} onClick={() => goTo(prevIdx)} />
+            </div>
+            <div>
+              <ProjectCard project={projects[activeIndex]} isActive={true} onClick={() => setModalProject(projects[activeIndex])} />
+            </div>
+            <div style={{ opacity: 0.5, cursor: "pointer", transition: "opacity 0.3s ease" }} onClick={() => goTo(nextIdx)}
+              onMouseEnter={(e) => (e.currentTarget as HTMLDivElement).style.opacity = "0.7"}
+              onMouseLeave={(e) => (e.currentTarget as HTMLDivElement).style.opacity = "0.5"}>
+              <ProjectCard project={projects[nextIdx]} isActive={false} onClick={() => goTo(nextIdx)} />
+            </div>
+          </div>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 16, marginTop: 32 }}>
+            <button onClick={() => goTo(prevIdx)} style={{ background: "none", border: "1.5px solid rgba(28,61,53,0.25)", borderRadius: "50%", width: 40, height: 40, cursor: "pointer", fontSize: 18, color: "#1C3D35", display: "flex", alignItems: "center", justifyContent: "center", transition: "border-color 0.2s ease" }}
               onMouseEnter={(e) => (e.currentTarget as HTMLButtonElement).style.borderColor = "#1C3D35"}
-              onMouseLeave={(e) => (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(28,61,53,0.25)"}>
-              ←
-            </button>
+              onMouseLeave={(e) => (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(28,61,53,0.25)"}>←</button>
             {projects.map((_, i) => (
-              <button key={i} onClick={() => goTo(i style={{ background: "none", border: "none", cursor: "pointer", padding: "4px 0" }}>
+              <button key={i} onClick={() => goTo(i)} style={{ background: "none", border: "none", cursor: "pointer", padding: "4px 0" }}>
                 <div style={{ width: i === activeIndex ? 28 : 8, height: 4, borderRadius: 2, backgroundColor: i === activeIndex ? "#1C3D35" : "rgba(28,61,53,0.2)", transition: "width 0.3s ease, background-color 0.3s ease" }} />
               </button>
             ))}
-            <button onClick={() => goTo((activeIndex + 1) % projects.length)}
-              style={{ background: "none", border: "1.5px solid rgba(28,61,53,0.25)", borderRadius: "50%", width: 40, height: 40, cursor: "pointer", fontSize: 18, color: "#1C3D35", display: "flex", alignItems: "center", justifyContent: "center", transition: "border-color 0.2s ease" }}
+            <button onClick={() => goTo(nextIdx)} style={{ background: "none", border: "1.5px solid rgba(28,61,53,0.25)", borderRadius: "50%", width: 40, height: 40, cursor: "pointer", fontSize: 18, color: "#1C3D35", display: "flex", alignItems: "center", justifyContent: "center", transition: "border-color 0.2s ease" }}
               onMouseEnter={(e) => (e.currentTarget as HTMLButtonElement).style.borderColor = "#1C3D35"}
-              onMouseLeave={(e) => (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(28,61,53,0.25)"}>
-              →
-            </button>
+              onMouseLeave={(e) => (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(16, 29, 26, 0.25)"}>→</button>
           </div>
         </div>
-      </d>
+      </div>
       {mounted && modalProject && createPortal(
         <ProjectModal project={modalProject} onClose={() => setModalProject(null)} />,
         document.body
