@@ -13,25 +13,19 @@ gsap.registerPlugin(ScrollTrigger);
 type Project = (typeof projects)[number];
 
 function ProjectCard({ project, onClick }: { project: Project; isActive: boolean; onClick: () => void }) {
-  const [thumbError, setThumbError] = useState(false);
   return (
     <div onClick={onClick} style={{ backgroundColor: "#EDE7D9", border: "1px solid rgba(28,61,53,0.12)", borderRadius: 4, overflow: "hidden", cursor: "pointer", transition: "box-shadow 0.3s ease, transform 0.2s ease" }}
       onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.boxShadow = "0 8px 32px rgba(28,61,53,0.12)"; (e.currentTarget as HTMLDivElement).style.transform = "translateY(-2px)"; }}
       onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.boxShadow = "none"; (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)"; }}>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", minHeight: 380 }}>
-        <div style={{ backgroundColor: "#1C3D35", padding: 28, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-          <div>
-            <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.14em", color: "#3EBFA0", marginBottom: 16 }}>SLIDE PREVIEW</div>
-            {!thumbError ? (
-              <img src={project.slideThumb} alt={project.title} onError={() => setThumbError(true)} style={{ width: "100%", borderRadius: 2, display: "block", border: "1px solid rgba(62,191,160,0.2)" }} />
-            ) : (
-              <div style={{ backgroundColor: "rgba(62,191,160,0.08)", border: "1px solid rgba(62,191,160,0.2)", borderRadius: 3, padding: "24px 20px" }}>
-                <div style={{ fontFamily: "Georgia, serif", fontSize: 16, fontWeight: 700, color: "#F5F0E8", lineHeight: 1.3, marginBottom: 12 }}>{project.title}</div>
-                <div style={{ fontSize: 11, color: "rgba(245,240,232,0.45)" }}>{project.category}</div>
-              </div>
-            )}
-          </div>
-          <div style={{ fontSize: 11, color: "rgba(245,240,232,0.35)", fontStyle: "italic", marginTop: 16 }}>Click to view full presentation</div>
+        <div style={{ backgroundColor: "#1C3D35", display: "flex", flexDirection: "column", overflow: "hidden" }}>
+          <div style={{ padding: "16px 20px 8px", fontSize: 10, fontWeight: 600, letterSpacing: "0.14em", color: "#3EBFA0", flexShrink: 0 }}>SLIDE PREVIEW</div>
+          <iframe
+            src={project.slidesEmbed}
+            style={{ width: "100%", flex: 1, minHeight: 300, border: "none", display: "block", pointerEvents: "none" }}
+            title={project.title}
+          />
+          <div style={{ padding: "8px 20px 14px", fontSize: 11, color: "rgba(245,240,232,0.3)", fontStyle: "italic", flexShrink: 0 }}>Click to interact with slides</div>
         </div>
         <div style={{ padding: 28, display: "flex", flexDirection: "column", gap: 16, backgroundColor: project.bgColor }}>
           <div>
@@ -129,18 +123,27 @@ export default function Projects() {
         </div>
         <div ref={listRef} onMouseEnter={stopTimer} onMouseLeave={startTimer}>
           <ProjectCard project={projects[activeIndex]} isActive={true} onClick={() => setModalProject(projects[activeIndex])} />
-          <div style={{ display: "flex", justifyContent: "center", gap: 10, marginTop: 32, alignItems: "center" }}>
-            {projects.map((p, i) => (
-              <button key={i} onClick={() => goTo(i)} style={{ background: "none", border: "none", cursor: "pointer", padding: "4px 0", display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
-                <div style={{ width: i === activeIndex ? 32 : 8, height: 4, borderRadius: 2, backgroundColor: i === activeIndex ? "#1C3D35" : "rgba(28,61,53,0.2)", transition: "width 0.3s ease, background-color 0.3s ease" }} />
-                {i === activeIndex && (
-                  <span style={{ fontSize: 11, color: "#1C3D35", fontWeight: 600, letterSpacing: "0.06em" }}>{p.category}</span>
-                )}
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 16, marginTop: 28 }}>
+            <button onClick={() => goTo((activeIndex - 1 + projects.length) % projects.length)}
+              style={{ background: "none", border: "1.5px solid rgba(28,61,53,0.25)", borderRadius: "50%", width: 40, height: 40, cursor: "pointer", fontSize: 18, color: "#1C3D35", display: "flex", alignItems: "center", justifyContent: "center", transition: "border-color 0.2s ease" }}
+              onMouseEnter={(e) => (e.currentTarget as HTMLButtonElement).style.borderColor = "#1C3D35"}
+              onMouseLeave={(e) => (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(28,61,53,0.25)"}>
+              ←
+            </button>
+            {projects.map((_, i) => (
+              <button key={i} onClick={() => goTo(i style={{ background: "none", border: "none", cursor: "pointer", padding: "4px 0" }}>
+                <div style={{ width: i === activeIndex ? 28 : 8, height: 4, borderRadius: 2, backgroundColor: i === activeIndex ? "#1C3D35" : "rgba(28,61,53,0.2)", transition: "width 0.3s ease, background-color 0.3s ease" }} />
               </button>
             ))}
+            <button onClick={() => goTo((activeIndex + 1) % projects.length)}
+              style={{ background: "none", border: "1.5px solid rgba(28,61,53,0.25)", borderRadius: "50%", width: 40, height: 40, cursor: "pointer", fontSize: 18, color: "#1C3D35", display: "flex", alignItems: "center", justifyContent: "center", transition: "border-color 0.2s ease" }}
+              onMouseEnter={(e) => (e.currentTarget as HTMLButtonElement).style.borderColor = "#1C3D35"}
+              onMouseLeave={(e) => (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(28,61,53,0.25)"}>
+              →
+            </button>
           </div>
         </div>
-      </div>
+      </d>
       {mounted && modalProject && createPortal(
         <ProjectModal project={modalProject} onClose={() => setModalProject(null)} />,
         document.body
