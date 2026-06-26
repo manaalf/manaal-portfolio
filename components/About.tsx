@@ -12,13 +12,11 @@ const EDUCATION = [
     degree: "MS Business Analytics",
     school: "University of California, Irvine — Paul Merage School of Business",
     year: "2026",
-    gpa: "GPA 3.81",
   },
   {
     degree: "BS Economics",
     school: "Institute of Business Administration, Karachi",
     year: "2024",
-    gpa: "GPA 3.8",
   },
 ];
 
@@ -85,7 +83,6 @@ export default function About() {
       </span>
       <div style={{ display: "flex", gap: 12 }}>
         <span style={{ fontSize: 11, color: "var(--teal)", fontWeight: 600 }}>{edu.year}</span>
-        <span style={{ fontSize: 11, color: "rgba(245,240,232,0.5)" }}>{edu.gpa}</span>
       </div>
     </div>
   ))}
