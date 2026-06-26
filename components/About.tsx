@@ -7,11 +7,19 @@ import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const STAT_BOXES = [
-  { value: "MSBA",  label: "Paul Merage School of Business, UC Irvine · June 2026" },
-  { value: "5+",    label: "Projects" },
-  { value: "2026",  label: "Graduating" },
-  { value: "CA",    label: "Based in California" },
+const EDUCATION = [
+  {
+    degree: "MS Business Analytics",
+    school: "University of California, Irvine — Paul Merage School of Business",
+    year: "2026",
+    gpa: "GPA 3.81",
+  },
+  {
+    degree: "BS Economics",
+    school: "Institute of Business Administration, Karachi",
+    year: "2024",
+    gpa: "GPA 3.8",
+  },
 ];
 
 export default function About() {
@@ -65,19 +73,23 @@ export default function About() {
               }}
             />
 
-            {/* Stat grid */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2 }}>
-              {STAT_BOXES.map(({ value, label }) => (
-                <div key={value} style={{ backgroundColor: "var(--forest)", padding: "20px 22px" }}>
-                  <span style={{ fontFamily: "var(--font-display)", fontSize: 28, fontWeight: 700, color: "var(--teal)", display: "block", lineHeight: 1 }}>
-                    {value}
-                  </span>
-                  <span style={{ fontSize: 12, color: "rgba(245,240,232,0.8)", marginTop: 6, display: "block", lineHeight: 1.4 }}>
-                    {label}
-                  </span>
-                </div>
-              ))}
-            </div>
+            {/* Education */}
+<div style={{ display: "flex", flexDirection: "column", gap: 2, marginTop: 8 }}>
+  {EDUCATION.map((edu) => (
+    <div key={edu.degree} style={{ backgroundColor: "var(--forest)", padding: "20px 22px" }}>
+      <span style={{ fontFamily: "var(--font-display)", fontSize: 16, fontWeight: 700, color: "var(--teal)", display: "block", lineHeight: 1.2, marginBottom: 6 }}>
+        {edu.degree}
+      </span>
+      <span style={{ fontSize: 12, color: "rgba(245,240,232,0.8)", display: "block", lineHeight: 1.5, marginBottom: 4 }}>
+        {edu.school}
+      </span>
+      <div style={{ display: "flex", gap: 12 }}>
+        <span style={{ fontSize: 11, color: "var(--teal)", fontWeight: 600 }}>{edu.year}</span>
+        <span style={{ fontSize: 11, color: "rgba(245,240,232,0.5)" }}>{edu.gpa}</span>
+      </div>
+    </div>
+  ))}
+</div>
           </div>
 
           {/* Right — body text */}
